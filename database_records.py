@@ -523,7 +523,7 @@ class EGVRecord(GenericTimestampedRecord):
 
   @property
   def full_trend(self):
-    return self.data[3]
+    return ord(self.data[3]) #ord JM
 
   @property
   def display_only(self):
@@ -544,7 +544,7 @@ class EGVRecord(GenericTimestampedRecord):
 
   @property
   def testNum(self):
-    return self.data[5] & EGV_TESTNUM_MASK
+    return self.data[-1] & EGV_TESTNUM_MASK #-1 JM
 
   @property
   def trend_arrow(self):

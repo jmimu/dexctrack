@@ -122,6 +122,7 @@ class readReceiverBase(readdata.Dexcom):
 
             #--------------------------------------------------------------------------------
             conn = sqlite3.connect(dbPath)
+            conn.text_factory = str
             try:
                 curs = conn.cursor()
 
@@ -184,7 +185,11 @@ class readReceiverBase(readdata.Dexcom):
                 for cal_rec in respList:
                     #print ('raw_data =',' '.join(' %02x' % ord(c) for c in cal_rec.raw_data))
                     #print ('Calib(', cal_rec.system_secs, ',', cal_rec.display_secs, ', ', cal_rec.meter_secs, ', ', cal_rec.record_type, ', ', cal_rec.calib_gluc, ',', cal_rec.testNum)
-                    curs.execute(insert_cal_sql, (cal_rec.system_secs, cal_rec.display_secs, cal_rec.meter_secs, cal_rec.record_type, cal_rec.calib_gluc, cal_rec.testNum, cal_rec.xx))
+                    if (self.rr_version == 'g5') or (self.rr_version == 'g6'): #if JM
+                        curs.execute(insert_cal_sql, (cal_rec.system_secs, cal_rec.display_secs, cal_rec.meter_secs, cal_rec.record_type, cal_rec.calib_gluc, cal_rec.testNum, cal_rec.xx))
+                    else:
+                        curs.execute(insert_cal_sql, (cal_rec.system_secs, cal_rec.display_secs, cal_rec.meter_secs, 0, cal_rec.calib_gluc, cal_rec.testNum, 0))
+
 
                 del respList
                 curs.close()

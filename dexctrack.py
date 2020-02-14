@@ -2089,6 +2089,8 @@ def readDataFromSql(sqlMinTime, sqlMaxTime):
                 else:
                     # No calRow found so specify a 0 distance offset
                     calibList.append([ReceiverTimeToUtcTime(row[0]), row[1], 0, None])
+            if len(sqlData)==0: #JM: no testNum = 16777215 with g4 since no testNum...
+                calibList.append([0, 0, 0, None])
 
         #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         selectSql = "SELECT count(*) from sqlite_master where type='table' and name='UserEvent'"
